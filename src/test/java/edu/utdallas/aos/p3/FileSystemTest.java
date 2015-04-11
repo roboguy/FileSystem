@@ -40,7 +40,7 @@ public class FileSystemTest {
 	@Test
 	public void testListOfFiles()
 	{
-		FileSystem f=new FileSystem("root0");
+		FileSystem f=new FileSystem("root1");
 		ArrayList<String> output=f.getListOfFile();
 		for(String s:output)
 			System.out.println(s);

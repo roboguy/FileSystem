@@ -1,5 +1,6 @@
 package edu.utdallas.aos.p3;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -10,6 +11,7 @@ import java.util.Scanner;
 
 public class FileSystem {
 	
+	static final Logger logger = LogManager.getLogger(FileSystem.class);
 	File []listOfFiles=null;
 	String rootFolderPath="";
 	//gets the OS based delimiter
@@ -28,11 +30,13 @@ public class FileSystem {
 		}
 		catch(NullPointerException n)
 		{
-			System.out.println("The directory: "+rootFolder+" does not exist ");
+			logger.error("The directory: "+rootFolder+" does not exist ");
+			//System.out.println("The directory: "+rootFolder+" does not exist ");
 		}
 		catch(Exception e)
 		{
-			System.out.println("There are no files in the directory "+rootFolder);
+			logger.error("There are no files in the directory "+rootFolder);
+			//System.out.println("There are no files in the directory "+rootFolder);
 		}
 		
 	}
@@ -45,21 +49,16 @@ public class FileSystem {
 		try {
 			scan = new Scanner(new File(path));
 			line=scan.nextLine();
-			//in case of blank
-			if(line.trim().equals(""))
-			{
-				System.out.println("There is blank data in the file");
-				scan.close();
-				System.exit(1);
-			}
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("The absolute file path: "+path+" was not found");
+			logger.error("The absolute file path: "+path+" was not found");
+			//System.out.println("The absolute file path: "+path+" was not found");
 			//e.printStackTrace();
 		}
 		catch(NoSuchElementException e)
 		{
-			System.out.println("No line found in the file");
+			logger.error("No line found in the file");
+			//System.out.println("No line found in the file");
 		}
 		finally{
 			scan.close();
@@ -79,11 +78,12 @@ public class FileSystem {
 			{
 				f=new FileWriter(filepath);
 				//check data standard
-				if(data==null || data.trim().equals("")||data.length()==0)
+				if(data==null)
 					try {
 						throw new Exception();
 					} catch (Exception e) {
-						System.out.println("Check the data while Writing to a File: "+filepath);
+						logger.error("Check the data while Writing to a File: "+filepath);
+						//System.out.println("Check the data while Writing to a File: "+filepath);
 						
 					}
 				//write to data only if we are done with all check
@@ -97,7 +97,8 @@ public class FileSystem {
 		}
 		catch (FileNotFoundException e) 
 		{
-			System.out.println("File does not exist for writing at absolute path:"+filepath);
+			logger.error("File does not exist for writing at absolute path:"+filepath);
+			//System.out.println("File does not exist for writing at absolute path:"+filepath);
 		}
 		catch (IOException e) {
 		
@@ -107,9 +108,9 @@ public class FileSystem {
 			try {
 				f.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				System.out.println("File close did not happen properly in finally()");
-				e.printStackTrace();
+				logger.error("File close did not happen properly in finally()");
+				//System.out.println("File close did not happen properly in finally()");
+				//e.printStackTrace();
 			}
 		}
 	}

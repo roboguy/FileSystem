@@ -6,7 +6,7 @@
     </Console>
   </Appenders>
   <Loggers>
-    <Logger name="com.example.template.App" level="TRACE">
+    <Logger name="edu.utdallas.aos.p3" level="TRACE">
       <AppenderRef ref="Console"/>
     </Logger>
     <Root level="TRACE">
