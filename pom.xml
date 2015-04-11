@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.example.template</groupId>
-	<artifactId>LibProjectTemplate</artifactId>
+	<artifactId>FileSystem</artifactId>
 	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
@@ -48,7 +48,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.example.template.App</mainClass>
+							<mainClass>edu.utdallas.aos.p3</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
