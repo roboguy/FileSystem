@@ -1,4 +1,4 @@
-package edu.utdallas.aos.p3;
+package edu.utdallas.aos.p3.filesystem;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +21,7 @@ public class FileSystem {
 	// gets the OS based delimiter
 	String fileDelimiter = System.getProperty("file.separator");
 
-	FileSystem(String root) {
+	public FileSystem(String root) {
 		File rootFolder = new File(root);
 		boolean rootFolderExists = rootFolder.exists();
 
