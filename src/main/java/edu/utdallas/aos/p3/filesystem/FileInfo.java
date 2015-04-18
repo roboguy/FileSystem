@@ -107,7 +107,7 @@ public class FileInfo {
 
 
 	
-	public FileInfo getDefaultInformation(Integer replicasUpdated, Integer versionNumber)
+	public static FileInfo getDefaultInformation(Integer replicasUpdated, Integer versionNumber)
 	{
 		FileInfo defaultInfo 	= new FileInfo();
 		

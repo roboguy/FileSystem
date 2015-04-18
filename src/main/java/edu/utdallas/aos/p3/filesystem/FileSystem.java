@@ -42,18 +42,21 @@ public class FileSystem {
 		String path = rootFolderPath + fileDelimiter + fileName;
 		Scanner scanner = null;
 		String line = "";
-		scanner = new Scanner(new File(path));
-		line = scanner.nextLine();
-		scanner.close();
+		try{
+			scanner = new Scanner(new File(path));
+			line = scanner.nextLine();
+		} finally {
+			if(scanner != null)
+				scanner.close();
+		}
 		return line;
-
 	}
 
 	public void write(String fileName, String data) throws IOException {
 		// path of the file
 		String filepath = rootFolderPath + fileDelimiter + fileName;
 		File file = new File(filepath);
-		
+		BufferedWriter writer = null;
 		if(!file.exists()){
 			logger.error("File Not found.");
 			throw new FileNotFoundException("File at " + filepath + " not found.");
@@ -64,14 +67,12 @@ public class FileSystem {
 			logger.warn("Writing empty line to file.");
 		}
 		
-		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-		
 		try{
+			writer = new BufferedWriter(new FileWriter(file));
 			writer.write(data);
-		} catch(IOException execption) {
-			throw execption;
-		} finally {
-			writer.close();
+		}  finally {
+			if(writer != null)
+				writer.close();
 		}
 	}
 

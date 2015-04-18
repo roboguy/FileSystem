@@ -17,5 +17,14 @@ public class FileSystemHandler {
 			replicatedFiles.put(fileName, defaultInformation);
 		}
 	}
+
+	public FileSystem getFilesystem() {
+		return filesystem;
+	}
+
+	public ConcurrentHashMap<String, FileInfo> getReplicatedFiles() {
+		return replicatedFiles;
+	}
+	
 	
 }
