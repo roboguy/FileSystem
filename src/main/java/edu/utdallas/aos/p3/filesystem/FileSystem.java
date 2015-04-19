@@ -1,8 +1,5 @@
 package edu.utdallas.aos.p3.filesystem;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,6 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FileSystem {
 
@@ -21,20 +21,22 @@ public class FileSystem {
 	// gets the OS based delimiter
 	String fileDelimiter = System.getProperty("file.separator");
 
-	public FileSystem(String root) {
+	public FileSystem(String root) throws FileNotFoundException {
 		File rootFolder = new File(root);
 		boolean rootFolderExists = rootFolder.exists();
 
 		if (rootFolderExists) {
 			listOfFiles = rootFolder.listFiles();
 			this.rootFolderPath = root;
+			//Fixes NPE if no root folder exists;
+			if (listOfFiles.length < 1) {
+				logger.error("There are no files in the directory " + rootFolder);
+				throw new FileNotFoundException("The folder at" + root + " is empty.");
+			}
 		} else {
 			logger.error("The directory: " + rootFolder + " does not exist ");
+			throw new FileNotFoundException("The folder at" + root + " does not exist.");
 		}
-		if (listOfFiles.length < 1) {
-			logger.error("There are no files in the directory " + rootFolder);
-		}
-
 	}
 
 	public String read(String fileName) throws FileNotFoundException, NoSuchElementException {
@@ -79,7 +81,7 @@ public class FileSystem {
 	public ArrayList<String> getListOfFile() {
 		ArrayList<String> list = new ArrayList<String>();
 		for (File f : listOfFiles)
-			list.add(f.getAbsolutePath());
+			list.add(f.getName());
 		return list;
 	}
 }

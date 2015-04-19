@@ -102,6 +102,7 @@ public class FileInfo {
 	
 	public boolean quorumObtained(){
 		//TODO:Check Quorum Condition for this FileName
+		//TODO: VERY VERY IMPORTANT TO GET THIS RIGHT !
 		return false;
 	}
 

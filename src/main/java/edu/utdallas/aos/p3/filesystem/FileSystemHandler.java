@@ -1,5 +1,6 @@
 package edu.utdallas.aos.p3.filesystem;
 
+import java.io.FileNotFoundException;
 import java.util.concurrent.ConcurrentHashMap;
 
 /*
@@ -11,7 +12,7 @@ public class FileSystemHandler {
 	FileSystem filesystem;
 	ConcurrentHashMap<String, FileInfo> replicatedFiles = new ConcurrentHashMap<>();
 	
-	public FileSystemHandler(String root, FileInfo defaultInformation){
+	public FileSystemHandler(String root, FileInfo defaultInformation) throws FileNotFoundException{
 		filesystem = new FileSystem(root);
 		for(String fileName : filesystem.getListOfFile()){
 			replicatedFiles.put(fileName, defaultInformation);

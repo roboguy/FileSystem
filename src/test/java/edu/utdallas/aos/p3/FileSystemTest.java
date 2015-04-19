@@ -21,7 +21,13 @@ public class FileSystemTest {
 	 */
 	@Test
 	public void testRead() {
-		FileSystem fs = new FileSystem("root0");
+		FileSystem fs = null;
+		
+		try {
+			fs = new FileSystem("root0");
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
 		String output = null;
 		try {
 			output = fs.read("1.txt");
@@ -36,7 +42,12 @@ public class FileSystemTest {
 	@Test
 	public void testWrite() {
 
-		FileSystem fs = new FileSystem("root0");
+		FileSystem fs = null;
+		try {
+			fs = new FileSystem("root0");
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
 		String readLine = null;
 		try {
 			fs.write("2.txt", "abc");
@@ -55,7 +66,12 @@ public class FileSystemTest {
 
 	@Test
 	public void testListOfFiles() {
-		FileSystem f = new FileSystem("root0");
+		FileSystem f = null;
+		try {
+			f = new FileSystem("root0");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		ArrayList<String> output = f.getListOfFile();
 		for (String s : output)
 			System.out.println(s);

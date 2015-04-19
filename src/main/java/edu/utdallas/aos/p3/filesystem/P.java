@@ -5,11 +5,20 @@ public class P {
 	private Integer versionNumber;
 	private Integer replicasUpdated;
 	private String content;
+	private Integer count;
 
 	public P(String id, Integer VN, Integer RU, String content){
 		
 	}
 	
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+
 	public String getNodeID() {
 		return nodeID;
 	}
