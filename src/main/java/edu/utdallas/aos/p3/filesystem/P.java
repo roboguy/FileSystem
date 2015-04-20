@@ -8,7 +8,10 @@ public class P {
 	private Integer count;
 
 	public P(String id, Integer VN, Integer RU, String content){
-		
+		this.nodeID = id;
+		this.versionNumber = VN;
+		this.replicasUpdated = RU;
+		this.content = content;
 	}
 	
 	public Integer getCount() {

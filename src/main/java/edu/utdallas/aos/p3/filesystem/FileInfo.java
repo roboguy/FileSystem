@@ -103,25 +103,31 @@ public class FileInfo {
 	public boolean quorumObtained(){
 		//TODO:Check Quorum Condition for this FileName
 		//TODO: VERY VERY IMPORTANT TO GET THIS RIGHT !
-		return false;
+		return true;
 	}
 
-
+	public void resetQuorumCondition(){
+		this.isQuorumAcquired = false;
+		this.consentObtained_P = new LinkedHashSet<>();
+		this.quorum_Q = new LinkedHashSet<>();
+		this.max_RU_M = 0;
+		this.N = 0;
+	}
 	
 	public static FileInfo getDefaultInformation(Integer replicasUpdated, Integer versionNumber)
 	{
 		FileInfo defaultInfo 	= new FileInfo();
 		
-		defaultInfo.versionNumber 	= versionNumber;
-		defaultInfo.replicasUpdated = replicasUpdated;
-		defaultInfo.isQuorumAcquired= false;
-		defaultInfo.isReadLocked	= false;
-		defaultInfo.isWriteLocked	= false;
-		defaultInfo.readWriteLock 	= new ReentrantReadWriteLock();
-		defaultInfo.max_RU_M 		= 0;
-		defaultInfo.consentObtained_P 				= new LinkedHashSet<>();
-		defaultInfo.quorum_Q				= new LinkedHashSet<>();
-		defaultInfo.N				= 0;
+		defaultInfo.versionNumber 		= versionNumber;
+		defaultInfo.replicasUpdated 	= replicasUpdated;
+		defaultInfo.isQuorumAcquired	= false;
+		defaultInfo.isReadLocked		= false;
+		defaultInfo.isWriteLocked		= false;
+		defaultInfo.readWriteLock 		= new ReentrantReadWriteLock();
+		defaultInfo.max_RU_M 			= 0;
+		defaultInfo.consentObtained_P 	= new LinkedHashSet<>();
+		defaultInfo.quorum_Q			= new LinkedHashSet<>();
+		defaultInfo.N					= 0;
 		
 		return defaultInfo;
 	}
