@@ -7,13 +7,13 @@ public class P {
 	private String content;
 	private Integer count;
 
-	public P(String id, Integer VN, Integer RU, String content){
+	public P(String id, Integer VN, Integer RU, String content) {
 		this.nodeID = id;
 		this.versionNumber = VN;
 		this.replicasUpdated = RU;
 		this.content = content;
 	}
-	
+
 	public Integer getCount() {
 		return count;
 	}
@@ -54,6 +54,26 @@ public class P {
 		this.content = content;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		P objP = null;
+		if (obj instanceof P) {
+			objP = (P) obj;
+		} else {
+			return false;
+		}
+		
+		if (this.nodeID == objP.nodeID) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
+	@Override
+	public int hashCode() {
+		int id = Integer.parseInt(nodeID);
+		return id;
+	}
 
 }

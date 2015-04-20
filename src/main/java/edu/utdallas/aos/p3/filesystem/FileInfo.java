@@ -1,7 +1,9 @@
 package edu.utdallas.aos.p3.filesystem;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class FileInfo {
@@ -11,9 +13,9 @@ public class FileInfo {
 	private Boolean isWriteLocked;
 	private Boolean isQuorumAcquired;
 	private ReentrantReadWriteLock readWriteLock;
-	private Set<P> consentObtained_P;
-	private Set<Q> quorum_Q;
-	private Integer max_RU_M;
+	private Map<String, P> consentObtained_P;
+	private Map<String, Q> quorum_Q;
+	private Integer max_VN_M;
 	private Integer N;
 
 	public Integer getVersionNumber() {
@@ -64,28 +66,28 @@ public class FileInfo {
 		this.readWriteLock = readWriteLock;
 	}
 
-	public Set<P> getP() {
+	public Map<String, P> getP() {
 		return consentObtained_P;
 	}
 
-	public void setP(Set<P> p) {
+	public void setP(Map<String, P> p) {
 		consentObtained_P = p;
 	}
 
-	public Set<Q> getQ() {
+	public Map<String, Q> getQ() {
 		return quorum_Q;
 	}
 
-	public void setQ(Set<Q> q) {
+	public void setQ(Map<String, Q> q) {
 		quorum_Q = q;
 	}
 
 	public Integer getMax_RU_M() {
-		return max_RU_M;
+		return max_VN_M;
 	}
 
 	public void setMax_RU_M(Integer max_RU_M) {
-		this.max_RU_M = max_RU_M;
+		this.max_VN_M = max_RU_M;
 	}
 
 	public Integer getN() {
@@ -100,17 +102,87 @@ public class FileInfo {
 		
 	}
 	
-	public boolean quorumObtained(){
+	public synchronized boolean quorumObtained(String dU, FileSystemHandler fsHandler, String fileName){
 		//TODO:Check Quorum Condition for this FileName
 		//TODO: VERY VERY IMPORTANT TO GET THIS RIGHT !
-		return true;
+		if(consentObtained_P.size() < 1){
+			return false;
+		}
+		
+		int max = 0;
+		for(Entry<String, P> entry : consentObtained_P.entrySet()){
+			P pi = entry.getValue();
+			if(pi.getVersionNumber() > max){
+				max = pi.getVersionNumber();
+			}
+		}
+		//M = max{VNj | Sj belongs to P}
+		this.max_VN_M = max;
+		
+		for(Entry<String, P> entry : consentObtained_P.entrySet()){
+			String key = entry.getKey();
+			P pi = entry.getValue();
+			//Q = {Sj | VNj = M}
+			if(pi.getVersionNumber() == this.max_VN_M){
+				Q qi = (Q) pi;
+				
+				//DS = DSj where Sj belongs to Q
+				if(qi.getNodeID() == dU){
+					qi.setIsDS(true);
+				} else {
+					qi.setIsDS(false);
+				}
+				
+				//N = {RUj where Sj belongs to Q
+				this.N = qi.getReplicasUpdated();
+				
+				quorum_Q.put(key, qi);
+			}
+		}
+		
+		Integer modQ = quorum_Q.size();
+		
+		if(modQ > (N/2)){
+			isQuorumAcquired = true;
+		}else if(modQ == (N/2)){
+			
+			for(Entry<String, Q> qEntry : quorum_Q.entrySet()){
+				Q qi = qEntry.getValue();
+				if(qi.getIsDS()){
+					isQuorumAcquired = true;
+				}
+			}
+			isQuorumAcquired = false;
+		} else {
+			isQuorumAcquired = false;
+		}
+		
+		for(Entry<String, Q> qEntry : quorum_Q.entrySet()){
+			Q qi = qEntry.getValue();
+			//If I have a stale copy
+			if(qi.getVersionNumber() == this.max_VN_M){
+				//This code should not run.
+				String content = qi.getContent();
+				try {
+					//Update stale copy with latest version.
+					fsHandler.getFilesystem().write(fileName, content);
+					break;
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	
+		return isQuorumAcquired;
+		
 	}
 
 	public void resetQuorumCondition(){
 		this.isQuorumAcquired = false;
-		this.consentObtained_P = new LinkedHashSet<>();
-		this.quorum_Q = new LinkedHashSet<>();
-		this.max_RU_M = 0;
+		this.consentObtained_P = new LinkedHashMap<>();
+		this.quorum_Q = new LinkedHashMap<>();
+		this.max_VN_M = 0;
 		this.N = 0;
 	}
 	
@@ -124,9 +196,9 @@ public class FileInfo {
 		defaultInfo.isReadLocked		= false;
 		defaultInfo.isWriteLocked		= false;
 		defaultInfo.readWriteLock 		= new ReentrantReadWriteLock();
-		defaultInfo.max_RU_M 			= 0;
-		defaultInfo.consentObtained_P 	= new LinkedHashSet<>();
-		defaultInfo.quorum_Q			= new LinkedHashSet<>();
+		defaultInfo.max_VN_M 			= 0;
+		defaultInfo.consentObtained_P 	= new LinkedHashMap<>();
+		defaultInfo.quorum_Q			= new LinkedHashMap<>();
 		defaultInfo.N					= 0;
 		
 		return defaultInfo;
