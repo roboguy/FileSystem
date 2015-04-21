@@ -105,7 +105,7 @@ public class FileInfo {
 	public synchronized boolean quorumObtained(String dU, FileSystemHandler fsHandler, String fileName){
 		//TODO:Check Quorum Condition for this FileName
 		//TODO: VERY VERY IMPORTANT TO GET THIS RIGHT !
-		if(consentObtained_P.size() < 1){
+		if(consentObtained_P.size() <= 0){
 			return false;
 		}
 		
@@ -124,10 +124,9 @@ public class FileInfo {
 			P pi = entry.getValue();
 			//Q = {Sj | VNj = M}
 			if(pi.getVersionNumber() == this.max_VN_M){
-				Q qi = (Q) pi;
-				
+				Q qi = new Q(key, pi.getVersionNumber(), pi.getReplicasUpdated(), pi.getContent());
 				//DS = DSj where Sj belongs to Q
-				if(qi.getNodeID() == dU){
+				if(qi.getNodeID().equals(dU)){
 					qi.setIsDS(true);
 				} else {
 					qi.setIsDS(false);
@@ -150,6 +149,7 @@ public class FileInfo {
 				Q qi = qEntry.getValue();
 				if(qi.getIsDS()){
 					isQuorumAcquired = true;
+					return isQuorumAcquired;
 				}
 			}
 			isQuorumAcquired = false;
