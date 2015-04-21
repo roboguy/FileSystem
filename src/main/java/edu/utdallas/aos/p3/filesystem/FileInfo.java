@@ -103,8 +103,8 @@ public class FileInfo {
 	}
 	
 	public synchronized boolean quorumObtained(String dU, FileSystemHandler fsHandler, String fileName){
-		//TODO:Check Quorum Condition for this FileName
-		//TODO: VERY VERY IMPORTANT TO GET THIS RIGHT !
+		//Check Quorum Condition for this FileName
+		//TODO: TEST VERY VERY IMPORTANT TO GET THIS RIGHT !
 		if(consentObtained_P.size() <= 0){
 			return false;
 		}

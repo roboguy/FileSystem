@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import edu.utdallas.aos.p3.filesystem.P;
 
+@SuppressWarnings("all")
 public class PTest {
 	
 	@Test
