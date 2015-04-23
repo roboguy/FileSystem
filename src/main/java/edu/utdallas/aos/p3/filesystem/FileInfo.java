@@ -1,6 +1,5 @@
 package edu.utdallas.aos.p3.filesystem;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,6 +16,26 @@ public class FileInfo {
 	private Map<String, Q> quorum_Q;
 	private Integer max_VN_M;
 	private Integer N;
+	private String latestContent;
+	private Integer latestVN;
+	
+	
+
+	public String getLatestContent() {
+		return latestContent;
+	}
+
+	public void setLatestContent(String latestContent) {
+		this.latestContent = latestContent;
+	}
+
+	public Integer getLatestVN() {
+		return latestVN;
+	}
+
+	public void setLatestVN(Integer latestVN) {
+		this.latestVN = latestVN;
+	}
 
 	public Integer getVersionNumber() {
 		return versionNumber;
@@ -161,15 +180,11 @@ public class FileInfo {
 			Q qi = qEntry.getValue();
 			//If I have a stale copy
 			if(qi.getVersionNumber() == this.max_VN_M){
-				//This code should not run.
 				String content = qi.getContent();
-				try {
-					//Update stale copy with latest version.
-					fsHandler.getFilesystem().write(fileName, content);
-					break;
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				//Update stale copy with latest version.
+				latestContent = content;
+				latestVN = qi.getVersionNumber();
+				break;
 			}
 		}
 		
@@ -184,6 +199,8 @@ public class FileInfo {
 		this.quorum_Q = new LinkedHashMap<>();
 		this.max_VN_M = 0;
 		this.N = 0;
+		this.latestContent = "";
+		this.latestVN = 0;
 	}
 	
 	public static FileInfo getDefaultInformation(Integer replicasUpdated, Integer versionNumber)
@@ -200,6 +217,8 @@ public class FileInfo {
 		defaultInfo.consentObtained_P 	= new LinkedHashMap<>();
 		defaultInfo.quorum_Q			= new LinkedHashMap<>();
 		defaultInfo.N					= 0;
+		defaultInfo.latestContent		= "";
+		defaultInfo.latestVN			= 0;
 		
 		return defaultInfo;
 	}
