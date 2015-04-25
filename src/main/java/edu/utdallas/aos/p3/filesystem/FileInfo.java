@@ -11,6 +11,7 @@ public class FileInfo {
 	private Boolean isReadLocked;
 	private Boolean isWriteLocked;
 	private Boolean isQuorumAcquired;
+	//private Semaphore fileSemaphore;
 	private ReentrantReadWriteLock readWriteLock;
 	private Map<String, P> consentObtained_P;
 	private Map<String, Q> quorum_Q;
@@ -121,6 +122,15 @@ public class FileInfo {
 		
 	}
 	
+	
+//	public Semaphore getFileSemaphore() {
+//		return fileSemaphore;
+//	}
+//
+//	public void setFileSemaphore(Semaphore fileSemaphore) {
+//		this.fileSemaphore = fileSemaphore;
+//	}
+
 	public synchronized boolean quorumObtained(String dU, FileSystemHandler fsHandler, String fileName){
 		//Check Quorum Condition for this FileName
 		//TODO: TEST VERY VERY IMPORTANT TO GET THIS RIGHT !
@@ -212,6 +222,7 @@ public class FileInfo {
 		defaultInfo.isQuorumAcquired	= false;
 		defaultInfo.isReadLocked		= false;
 		defaultInfo.isWriteLocked		= false;
+		//defaultInfo.fileSemaphore		= new Semaphore(10, true);
 		defaultInfo.readWriteLock 		= new ReentrantReadWriteLock();
 		defaultInfo.max_VN_M 			= 0;
 		defaultInfo.consentObtained_P 	= new LinkedHashMap<>();
