@@ -131,7 +131,7 @@ public class FileInfo {
 //		this.fileSemaphore = fileSemaphore;
 //	}
 
-	public synchronized boolean quorumObtained(String dU, FileSystemHandler fsHandler, String fileName){
+	public synchronized boolean quorumObtained(String dU){
 		//Check Quorum Condition for this FileName
 		//TODO: TEST VERY VERY IMPORTANT TO GET THIS RIGHT !
 		if(consentObtained_P.size() <= 0){
