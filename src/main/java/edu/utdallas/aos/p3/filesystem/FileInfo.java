@@ -3,7 +3,7 @@ package edu.utdallas.aos.p3.filesystem;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.Semaphore;
 
 public class FileInfo {
 	private Integer versionNumber;
@@ -11,8 +11,8 @@ public class FileInfo {
 	private Boolean isReadLocked;
 	private Boolean isWriteLocked;
 	private Boolean isQuorumAcquired;
-	//private Semaphore fileSemaphore;
-	private ReentrantReadWriteLock readWriteLock;
+	private Semaphore fileSemaphore;
+	//private ReentrantReadWriteLock readWriteLock;
 	private Map<String, P> consentObtained_P;
 	private Map<String, Q> quorum_Q;
 	private Integer max_VN_M;
@@ -78,13 +78,13 @@ public class FileInfo {
 		this.isQuorumAcquired = isQuorumAcquired;
 	}
 
-	public ReentrantReadWriteLock getReadWriteLock() {
-		return readWriteLock;
-	}
-
-	public void setReadWriteLock(ReentrantReadWriteLock readWriteLock) {
-		this.readWriteLock = readWriteLock;
-	}
+//	public ReentrantReadWriteLock getReadWriteLock() {
+//		return readWriteLock;
+//	}
+//
+//	public void setReadWriteLock(ReentrantReadWriteLock readWriteLock) {
+//		this.readWriteLock = readWriteLock;
+//	}
 
 	public Map<String, P> getP() {
 		return consentObtained_P;
@@ -122,14 +122,13 @@ public class FileInfo {
 		
 	}
 	
-	
-//	public Semaphore getFileSemaphore() {
-//		return fileSemaphore;
-//	}
-//
-//	public void setFileSemaphore(Semaphore fileSemaphore) {
-//		this.fileSemaphore = fileSemaphore;
-//	}
+	public Semaphore getFileSemaphore() {
+		return fileSemaphore;
+	}
+
+	public void setFileSemaphore(Semaphore fileSemaphore) {
+		this.fileSemaphore = fileSemaphore;
+	}
 
 	public synchronized boolean quorumObtained(String dU){
 		//Check Quorum Condition for this FileName
@@ -222,8 +221,8 @@ public class FileInfo {
 		defaultInfo.isQuorumAcquired	= false;
 		defaultInfo.isReadLocked		= false;
 		defaultInfo.isWriteLocked		= false;
-		//defaultInfo.fileSemaphore		= new Semaphore(10, true);
-		defaultInfo.readWriteLock 		= new ReentrantReadWriteLock();
+		defaultInfo.fileSemaphore		= new Semaphore(10, true);
+		//defaultInfo.readWriteLock 		= new ReentrantReadWriteLock();
 		defaultInfo.max_VN_M 			= 0;
 		defaultInfo.consentObtained_P 	= new LinkedHashMap<>();
 		defaultInfo.quorum_Q			= new LinkedHashMap<>();
